@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Aplicaciones - COOTRAVIR</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    
+    #single-spa-application:home {
+      min-height: 100vh;
+    }
+    
+    #single-spa-application:it,
+    #single-spa-application:gestion-humana {
+      min-height: 100vh;
+    }
+    
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #64748b;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #e2e8f0;
+      border-top: 5px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Estilos para el portal independiente */
+    .portal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .portal-header h1 {
+      margin: 0 0 20px 0;
+      font-size: 2rem;
+    }
+    
+    .portal-nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    
+    .module-container {
+      width: 100%;
+      height: calc(100vh - 80px);
+    }
+  </style>
+</head>
+<body>
+  <div id="single-spa-application:home"></div>
+  <div id="single-spa-application:it"></div>
+  <div id="single-spa-application:gestion-humana"></div>
+  
+  <!-- Portal independiente sin Single SPA -->
+  <div id="portal-container" style="display: none;">
+    <div class="portal-header">
+      <h1>Portal COOTRAVIR</h1>
+      <nav class="portal-nav">
+        <button onclick="loadModule('home')" class="nav-btn">Dashboard</button>
+        <button onclick="loadModule('it')" class="nav-btn">IT</button>
+        <button onclick="loadModule('gestion-humana')" class="nav-btn">Gestión Humana</button>
+      </nav>
+    </div>
+    <div id="module-container" class="module-container"></div>
+  </div>
+  
+  <script>
+    // Función para cargar módulos directamente
+    function loadModule(module) {
+      const container = document.getElementById('module-container')
+      const urls = {
+        'home': 'http://localhost:3000',
+        'it': 'http://localhost:3001',
+        'gestion-humana': 'http://localhost:3002'
+      }
+      
+      if (container && urls[module]) {
+        container.innerHTML = `
+          <iframe 
+            src="${urls[module]}" 
+            style="width: 100%; height: calc(100vh - 80px); border: none;"
+            title="${module}"
+          ></iframe>
+        `
+      }
+    }
+    
+    // Mostrar el portal independiente y ocultar Single SPA
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ocultar contenedores de Single SPA
+      document.getElementById('single-spa-application:home').style.display = 'none'
+      document.getElementById('single-spa-application:it').style.display = 'none'
+      document.getElementById('single-spa-application:gestion-humana').style.display = 'none'
+      
+      // Mostrar el portal independiente
+      document.getElementById('portal-container').style.display = 'block'
+      
+      // Cargar home por defecto
+      loadModule('home')
+    })
+  </script>
+  
+  <!-- SystemJS para cargar micro frontends -->
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.15.1/dist/system.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.15.1/dist/extras/amd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.15.1/dist/extras/named-exports.min.js"></script>
+  
+  <script type="module" src="./single-spa-config.js"></script>
+</body>
+</html>

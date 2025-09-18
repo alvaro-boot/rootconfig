@@ -1,0 +1,32 @@
+{
+  "name": "cootravir-portal",
+  "version": "1.0.0",
+  "description": "Portal de aplicaciones COOTRAVIR con Single SPA",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:home\" \"npm run dev:it\" \"npm run dev:gestion-humana\" \"npm run dev:root\"",
+    "dev:it": "cd ../IT && npm run dev -- --port 3001",
+    "dev:gestion-humana": "cd ../gestion-humana && npm run dev -- --port 3002",
+    "dev:root": "vite --port 8080",
+    "build": "npm run build:home && npm run build:it && npm run build:gestion-humana && npm run build:root",
+    "build:home": "cd ../home && npm run build",
+    "build:it": "cd ../IT && npm run build",
+    "build:gestion-humana": "cd ../gestion-humana && npm run build",
+    "build:root": "vite build",
+    "preview": "vite preview --port 8080",
+    "install:all": "npm install && cd ../home && npm install && cd ../IT && npm install && cd ../gestion-humana && npm install"
+  },
+  "dependencies": {
+    "single-spa": "^6.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^7.0.6"
+  },
+  "workspaces": [
+    "../home",
+    "../IT",
+    "../gestion-humana"
+  ]
+}
