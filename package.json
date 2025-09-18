@@ -14,6 +14,7 @@
     "build:it": "cd ../IT && npm run build",
     "build:gestion-humana": "cd ../gestion-humana && npm run build",
     "build:root": "vite build",
+    "build:prod": "vite build",
     "start": "vite preview --port 8080 --host 0.0.0.0",
     "preview": "vite preview --port 8080",
     "install:all": "npm install && cd ../home && npm install && cd ../IT && npm install && cd ../gestion-humana && npm install"

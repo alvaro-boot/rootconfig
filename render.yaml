@@ -2,7 +2,7 @@ services:
   - type: web
     name: cootravir-portal
     env: node
-    buildCommand: npm run build:root
+    buildCommand: npm install && npm run build:root
     startCommand: npm run start
     envVars:
       - key: NODE_ENV

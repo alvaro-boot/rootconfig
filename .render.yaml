@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: cootravir-portal
+    env: node
+    buildCommand: npm install && npm run build:prod
+    startCommand: npm run start
