@@ -39,21 +39,21 @@ const createIframeApp = (url, containerId) => {
 // Registrar la aplicación principal (home)
 registerApplication({
   name: 'home',
-  app: () => Promise.resolve(createIframeApp('http://localhost:3000', 'single-spa-application:home')),
+  app: () => Promise.resolve(createIframeApp('https://home-1z8r.onrender.com', 'single-spa-application:home')),
   activeWhen: location => location.pathname === '/' || location.pathname.startsWith('/home')
 })
 
 // Registrar la aplicación IT
 registerApplication({
   name: 'it',
-  app: () => Promise.resolve(createIframeApp('http://localhost:3001', 'single-spa-application:it')),
+  app: () => Promise.resolve(createIframeApp('https://it-g8e6.onrender.com', 'single-spa-application:it')),
   activeWhen: location => location.pathname.startsWith('/it')
 })
 
 // Registrar la aplicación Gestión Humana
 registerApplication({
   name: 'gestion-humana',
-  app: () => Promise.resolve(createIframeApp('http://localhost:3002', 'single-spa-application:gestion-humana')),
+  app: () => Promise.resolve(createIframeApp('https://gh-8vga.onrender.com', 'single-spa-application:gestion-humana')),
   activeWhen: location => location.pathname.startsWith('/gestion-humana')
 })
 
