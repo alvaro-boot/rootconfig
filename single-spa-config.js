@@ -60,21 +60,31 @@ const createIframeApp = (url, containerId) => {
 registerApplication({
   name: 'home',
   app: () => Promise.resolve(createIframeApp('https://home-1z8r.onrender.com', 'single-spa-application:home')),
-  activeWhen: location => location.pathname === '/' || location.pathname.startsWith('/home')
+  activeWhen: () => {
+    // Solo activar si el contenedor está visible
+    const container = document.getElementById('single-spa-application:home')
+    return container && container.style.display !== 'none'
+  }
 })
 
 // Registrar la aplicación IT
 registerApplication({
   name: 'it',
   app: () => Promise.resolve(createIframeApp('https://it-g8e6.onrender.com', 'single-spa-application:it')),
-  activeWhen: location => location.pathname.startsWith('/it')
+  activeWhen: () => {
+    const container = document.getElementById('single-spa-application:it')
+    return container && container.style.display !== 'none'
+  }
 })
 
 // Registrar la aplicación Gestión Humana
 registerApplication({
   name: 'gestion-humana',
   app: () => Promise.resolve(createIframeApp('https://gh-8vga.onrender.com', 'single-spa-application:gestion-humana')),
-  activeWhen: location => location.pathname.startsWith('/gestion-humana')
+  activeWhen: () => {
+    const container = document.getElementById('single-spa-application:gestion-humana')
+    return container && container.style.display !== 'none'
+  }
 })
 
 // Iniciar Single SPA

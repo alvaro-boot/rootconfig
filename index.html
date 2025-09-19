@@ -21,34 +21,292 @@
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       color: #1e293b;
       line-height: 1.6;
+      overflow-x: hidden;
     }
     
-    #single-spa-application:home {
+    /* Layout principal */
+    .app-container {
+      display: flex;
       min-height: 100vh;
     }
     
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 4px 0 32px rgba(0,0,0,0.1);
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .sidebar.collapsed {
+      width: 70px;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .sidebar-logo i {
+      font-size: 24px;
+      color: #667eea;
+    }
+    
+    .sidebar-logo h1 {
+      font-size: 18px;
+      font-weight: 700;
+      transition: opacity 0.3s ease;
+    }
+    
+    .sidebar.collapsed .sidebar-logo h1 {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+    
+    .sidebar-toggle {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-toggle:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .sidebar-nav {
+      padding: 20px 0;
+      flex: 1;
+    }
+    
+    .nav-item {
+      margin-bottom: 8px;
+      padding: 0 15px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      color: #94a3b8;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: white;
+      transform: translateX(8px);
+    }
+    
+    .nav-link.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 8px 32px rgba(102,126,234,0.3);
+      transform: translateX(8px);
+    }
+    
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-link:hover .nav-icon {
+      transform: scale(1.1);
+    }
+    
+    .nav-text {
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar.collapsed .nav-text {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+    
+    .sidebar.collapsed .nav-link {
+      justify-content: center;
+      padding: 16px 10px;
+    }
+    
+    .sidebar.collapsed .nav-icon {
+      margin-right: 0;
+    }
+    
+    .sidebar-footer {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.2);
+    }
+    
+    .footer-info {
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    
+    .sidebar.collapsed .footer-info {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    
+    /* Contenido principal */
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100vh;
+    }
+    
+    .main-content.sidebar-collapsed {
+      margin-left: 70px;
+    }
+    
+    /* Top bar */
+    .top-bar {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-btn:hover {
+      background: rgba(100,116,139,0.1);
+      color: #1e293b;
+    }
+    
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: rgba(102,126,234,0.1);
+      border-radius: 20px;
+      color: #667eea;
+      font-weight: 500;
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    /* Contenido de micro frontends */
+    .microfrontend-container {
+      padding: 24px;
+      min-height: calc(100vh - 80px);
+    }
+    
+    #single-spa-application:home,
     #single-spa-application:it,
     #single-spa-application:gestion-humana {
-      min-height: 100vh;
+      min-height: calc(100vh - 80px);
     }
     
+    /* Loading states */
     .loading {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      height: 400px;
       color: #64748b;
     }
     
     .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #e2e8f0;
-      border-top: 5px solid #3b82f6;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid #667eea;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     
     @keyframes spin {
@@ -56,99 +314,360 @@
       100% { transform: rotate(360deg); }
     }
     
-    /* Estilos para el portal independiente */
-    .portal-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
-      text-align: center;
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      
+      .sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .top-bar {
+        padding: 12px 16px;
+      }
+      
+      .page-title {
+        font-size: 20px;
+      }
+      
+      .user-info {
+        display: none;
+      }
+      
+      .microfrontend-container {
+        padding: 16px;
+      }
     }
     
-    .portal-header h1 {
-      margin: 0 0 20px 0;
-      font-size: 2rem;
+    @media (max-width: 480px) {
+      .top-bar {
+        padding: 8px 12px;
+      }
+      
+      .page-title {
+        font-size: 18px;
+      }
+      
+      .microfrontend-container {
+        padding: 12px;
+      }
     }
     
-    .portal-nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
+    /* Overlay para móvil */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
     }
     
-    .nav-btn {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
+    .sidebar-overlay.active {
+      display: block;
     }
     
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-    }
-    
-    .module-container {
-      width: 100%;
-      height: calc(100vh - 80px);
+    @media (max-width: 768px) {
+      .sidebar-overlay.active {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <i class="fas fa-building"></i>
+          <h1>COOTRAVIR</h1>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-item">
+          <a href="#" class="nav-link active" onclick="navigateTo('home')" data-module="home">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateTo('it')" data-module="it">
+            <i class="fas fa-laptop-code nav-icon"></i>
+            <span class="nav-text">Tecnología</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateTo('gestion-humana')" data-module="gestion-humana">
+            <i class="fas fa-users nav-icon"></i>
+            <span class="nav-text">Gestión Humana</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateTo('configuracion')" data-module="configuracion">
+            <i class="fas fa-cog nav-icon"></i>
+            <span class="nav-text">Configuración</span>
+          </a>
+        </div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateTo('reportes')" data-module="reportes">
+            <i class="fas fa-chart-bar nav-icon"></i>
+            <span class="nav-text">Reportes</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="footer-info">
+          <p>Portal v2.0</p>
+          <p>© 2024 COOTRAVIR</p>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Overlay para móvil -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <!-- Contenido principal -->
+    <main class="main-content" id="main-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title" id="page-title">Dashboard</h1>
+        </div>
+        
+        <div class="top-bar-right">
+          <div class="user-info">
+            <div class="user-avatar">A</div>
+            <span>Administrador</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="microfrontend-container">
+        <!-- Contenedores de micro frontends -->
   <div id="single-spa-application:home"></div>
   <div id="single-spa-application:it"></div>
   <div id="single-spa-application:gestion-humana"></div>
   
-  <!-- Portal independiente sin Single SPA -->
-  <div id="portal-container" style="display: none;">
-    <div class="portal-header">
-      <h1>Portal COOTRAVIR</h1>
-      <nav class="portal-nav">
-        <button onclick="loadModule('home')" class="nav-btn">Dashboard</button>
-        <button onclick="loadModule('it')" class="nav-btn">IT</button>
-        <button onclick="loadModule('gestion-humana')" class="nav-btn">Gestión Humana</button>
-      </nav>
+        <!-- Contenedor para módulos no implementados -->
+        <div id="module-placeholder" style="display: none;">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Cargando módulo...</p>
+          </div>
+        </div>
     </div>
-    <div id="module-container" class="module-container"></div>
+    </main>
   </div>
   
   <script>
-    // Función para cargar módulos directamente
-    function loadModule(module) {
-      const container = document.getElementById('module-container')
-      const urls = {
-        'home': 'https://home-1z8r.onrender.com',
-        'it': 'https://it-g8e6.onrender.com',
-        'gestion-humana': 'https://gh-8vga.onrender.com'
-      }
-      
-      if (container && urls[module]) {
-        container.innerHTML = `
-          <iframe 
-            src="${urls[module]}" 
-            style="width: 100%; height: calc(100vh - 80px); border: none;"
-            title="${module}"
-          ></iframe>
-        `
+    // Estado de la aplicación
+    let currentModule = 'home'
+    let sidebarCollapsed = false
+    
+    // Configuración de módulos
+    const modules = {
+      'home': {
+        title: 'Dashboard',
+        url: 'https://home-1z8r.onrender.com',
+        container: 'single-spa-application:home'
+      },
+      'it': {
+        title: 'Tecnología de la Información',
+        url: 'https://it-g8e6.onrender.com',
+        container: 'single-spa-application:it'
+      },
+      'gestion-humana': {
+        title: 'Gestión Humana',
+        url: 'https://gh-8vga.onrender.com',
+        container: 'single-spa-application:gestion-humana'
+      },
+      'configuracion': {
+        title: 'Configuración',
+        url: null,
+        container: null
+      },
+      'reportes': {
+        title: 'Reportes',
+        url: null,
+        container: null
       }
     }
     
-    // Mostrar el portal independiente y ocultar Single SPA
+    // Función para navegar entre módulos
+    function navigateTo(moduleName) {
+      if (currentModule === moduleName) return
+      
+      // Actualizar estado
+      currentModule = moduleName
+      
+      // Actualizar navegación activa
+      updateActiveNavigation(moduleName)
+      
+      // Actualizar título de la página
+      updatePageTitle(modules[moduleName].title)
+      
+      // Ocultar todos los contenedores
+      hideAllContainers()
+      
+      // Mostrar el contenedor correspondiente
+      if (modules[moduleName].container) {
+        showContainer(modules[moduleName].container)
+      } else {
+        showPlaceholder(moduleName)
+      }
+      
+      // Cerrar sidebar en móvil
+      if (window.innerWidth <= 768) {
+        closeSidebar()
+      }
+    }
+    
+    // Función para actualizar navegación activa
+    function updateActiveNavigation(activeModule) {
+      const navLinks = document.querySelectorAll('.nav-link')
+      navLinks.forEach(link => {
+        link.classList.remove('active')
+        if (link.dataset.module === activeModule) {
+          link.classList.add('active')
+        }
+      })
+    }
+    
+    // Función para actualizar título de la página
+    function updatePageTitle(title) {
+      const pageTitle = document.getElementById('page-title')
+      if (pageTitle) {
+        pageTitle.textContent = title
+      }
+    }
+    
+    // Función para ocultar todos los contenedores
+    function hideAllContainers() {
+      const containers = [
+        'single-spa-application:home',
+        'single-spa-application:it',
+        'single-spa-application:gestion-humana'
+      ]
+      
+      containers.forEach(containerId => {
+        const container = document.getElementById(containerId)
+        if (container) {
+          container.style.display = 'none'
+        }
+      })
+      
+      // Ocultar placeholder
+      const placeholder = document.getElementById('module-placeholder')
+      if (placeholder) {
+        placeholder.style.display = 'none'
+      }
+    }
+    
+    // Función para mostrar contenedor
+    function showContainer(containerId) {
+      const container = document.getElementById(containerId)
+      if (container) {
+        container.style.display = 'block'
+      }
+    }
+    
+    // Función para mostrar placeholder
+    function showPlaceholder(moduleName) {
+      const placeholder = document.getElementById('module-placeholder')
+      if (placeholder) {
+        placeholder.innerHTML = `
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Módulo "${modules[moduleName].title}" en desarrollo</p>
+            <small>Esta funcionalidad estará disponible próximamente</small>
+          </div>
+        `
+        placeholder.style.display = 'block'
+      }
+    }
+    
+    // Función para toggle del sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar')
+      const mainContent = document.getElementById('main-content')
+      
+      sidebarCollapsed = !sidebarCollapsed
+      
+      if (sidebarCollapsed) {
+        sidebar.classList.add('collapsed')
+        mainContent.classList.add('sidebar-collapsed')
+      } else {
+        sidebar.classList.remove('collapsed')
+        mainContent.classList.remove('sidebar-collapsed')
+      }
+    }
+    
+    // Función para toggle del sidebar en móvil
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('sidebar')
+      const overlay = document.getElementById('sidebar-overlay')
+      
+      sidebar.classList.toggle('mobile-open')
+      overlay.classList.toggle('active')
+    }
+    
+    // Función para cerrar sidebar en móvil
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar')
+      const overlay = document.getElementById('sidebar-overlay')
+      
+      sidebar.classList.remove('mobile-open')
+      overlay.classList.remove('active')
+    }
+    
+    // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
-      // Ocultar contenedores de Single SPA
-      document.getElementById('single-spa-application:home').style.display = 'none'
-      document.getElementById('single-spa-application:it').style.display = 'none'
-      document.getElementById('single-spa-application:gestion-humana').style.display = 'none'
-      
-      // Mostrar el portal independiente
-      document.getElementById('portal-container').style.display = 'block'
-      
       // Cargar home por defecto
-      loadModule('home')
+      navigateTo('home')
+      
+      // Manejar redimensionamiento de ventana
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          closeSidebar()
+        }
+      })
+      
+      // Cerrar sidebar al hacer clic fuera en móvil
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          const sidebar = document.getElementById('sidebar')
+          const mobileMenuBtn = document.querySelector('.mobile-menu-btn')
+          
+          if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            closeSidebar()
+          }
+        }
+      })
     })
   </script>
   
