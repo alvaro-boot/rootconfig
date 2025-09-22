@@ -99,37 +99,7 @@
       flex: 1;
     }
     
-    /* Cambio rápido entre módulos (contextual) */
-    .quick-switch {
-      padding: 0 15px 16px 15px;
-      margin-top: -8px;
-    }
-    .quick-switch .switch-btn {
-      width: 100%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-      border: none;
-      padding: 12px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 8px 24px rgba(102,126,234,0.25);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      margin-top: 10px;
-    }
-    .quick-switch .switch-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(102,126,234,0.3);
-    }
-    .quick-switch .switch-btn.secondary {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      box-shadow: 0 8px 24px rgba(34,197,94,0.25);
-    }
+    /* (eliminado) estilos de quick-switch */
     
     .nav-item {
       margin-bottom: 8px;
@@ -600,25 +570,7 @@
         </div>
       </nav>
       
-      <!-- Cambio rápido contextual entre módulos -->
-      <div class="quick-switch">
-        <button id="qs-to-it" class="switch-btn" style="display:none" onclick="navigateTo('it')">
-          <i class="fas fa-laptop-code"></i>
-          Ir a Tecnología
-        </button>
-        <button id="qs-stay-gh" class="switch-btn secondary" style="display:none" onclick="navigateTo('gestion-humana')">
-          <i class="fas fa-users"></i>
-          Permanecer en Gestión Humana
-        </button>
-        <button id="qs-to-gh" class="switch-btn" style="display:none" onclick="navigateTo('gestion-humana')">
-          <i class="fas fa-users"></i>
-          Ir a Gestión Humana
-        </button>
-        <button id="qs-stay-it" class="switch-btn secondary" style="display:none" onclick="navigateTo('it')">
-          <i class="fas fa-laptop-code"></i>
-          Permanecer en Tecnología
-        </button>
-      </div>
+      <!-- (eliminado) quick-switch contextual -->
       
       <div class="sidebar-footer">
         <!-- Información del usuario -->
@@ -778,7 +730,7 @@
       if (pageTitle) {
         pageTitle.textContent = title
       }
-      updateQuickSwitch()
+      // (eliminado) updateQuickSwitch()
     }
     
     // Función para ocultar todos los contenedores
@@ -809,31 +761,10 @@
       if (container) {
         container.style.display = 'block'
       }
-      updateQuickSwitch()
+      // (eliminado) updateQuickSwitch()
     }
 
-    // Actualiza los botones contextuales de cambio rápido
-    function updateQuickSwitch() {
-      const toIT = document.getElementById('qs-to-it')
-      const stayGH = document.getElementById('qs-stay-gh')
-      const toGH = document.getElementById('qs-to-gh')
-      const stayIT = document.getElementById('qs-stay-it')
-      if (!toIT || !stayGH || !toGH || !stayIT) return
-      
-      // Reset
-      toIT.style.display = 'none'
-      stayGH.style.display = 'none'
-      toGH.style.display = 'none'
-      stayIT.style.display = 'none'
-      
-      if (currentModule === 'gestion-humana') {
-        toIT.style.display = 'inline-flex'
-        stayGH.style.display = 'inline-flex'
-      } else if (currentModule === 'it') {
-        toGH.style.display = 'inline-flex'
-        stayIT.style.display = 'inline-flex'
-      }
-    }
+    // (eliminado) updateQuickSwitch
     
     // Función para mostrar placeholder
     function showPlaceholder(moduleName) {
@@ -896,7 +827,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Cargar home por defecto
       navigateTo('home')
-      updateQuickSwitch()
+      // (eliminado) updateQuickSwitch()
       
       // Manejar redimensionamiento de ventana
       window.addEventListener('resize', function() {
@@ -925,7 +856,53 @@
           document.querySelector('.user-menu-btn').classList.remove('active')
         }
       })
+
+    // Escuchar solicitudes de navegación desde los microfrontends (iframes)
+    window.addEventListener('message', function(event) {
+      try {
+        const data = event.data || {}
+        if (data.type === 'navigate' && data.module) {
+          const targetModule = data.module
+          const path = data.path || '/'
+          const moduleCfg = modules[targetModule]
+          if (!moduleCfg) return
+          
+          // Navegar al módulo solicitado
+          navigateTo(targetModule)
+          
+          // Cuando el contenedor esté visible, ajustar la ruta del iframe
+          setTimeout(() => {
+            setIframePath(targetModule, path)
+          }, 50)
+        }
+      } catch (e) {
+        console.error('Error handling postMessage navigation:', e)
+      }
     })
+    })
+
+    // Helpers para manejar el iframe del módulo
+    function getIframeByModule(moduleName) {
+      const cfg = modules[moduleName]
+      if (!cfg || !cfg.container) return null
+      const container = document.getElementById(cfg.container)
+      if (!container) return null
+      // El iframe es el primer hijo cuando está montado
+      return container.querySelector('iframe')
+    }
+    
+    function setIframePath(moduleName, path) {
+      const cfg = modules[moduleName]
+      if (!cfg || !cfg.url) return
+      const iframe = getIframeByModule(moduleName)
+      if (!iframe) return
+      // Construir URL con path del micro
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`
+      const newUrl = `${cfg.url}${normalizedPath}`
+      if (iframe.src !== newUrl) {
+        iframe.src = newUrl
+      }
+    }
   </script>
   
   <!-- SystemJS para cargar micro frontends -->
