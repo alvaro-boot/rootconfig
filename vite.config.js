@@ -21,6 +21,9 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       '127.0.0.1',
+      'cootrapps.com',
+      'www.cootrapps.com',
+      '.cootrapps.com',
       'rootconfig.onrender.com',
       '.onrender.com'
     ]
