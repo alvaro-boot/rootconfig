@@ -99,6 +99,38 @@
       flex: 1;
     }
     
+    /* Cambio rápido entre módulos (contextual) */
+    .quick-switch {
+      padding: 0 15px 16px 15px;
+      margin-top: -8px;
+    }
+    .quick-switch .switch-btn {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(102,126,234,0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 10px;
+    }
+    .quick-switch .switch-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(102,126,234,0.3);
+    }
+    .quick-switch .switch-btn.secondary {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 8px 24px rgba(34,197,94,0.25);
+    }
+    
     .nav-item {
       margin-bottom: 8px;
       padding: 0 15px;
@@ -407,31 +439,6 @@
       gap: 16px;
     }
     
-    /* Botones de cambio rápido entre módulos */
-    .switch-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 8px 24px rgba(102,126,234,0.3);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .switch-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(102,126,234,0.35);
-    }
-    .switch-btn.secondary {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      box-shadow: 0 8px 24px rgba(34,197,94,0.3);
-    }
-    
     /* Estilos del usuario movidos al sidebar */
     
     /* Contenido de micro frontends */
@@ -593,6 +600,26 @@
         </div>
       </nav>
       
+      <!-- Cambio rápido contextual entre módulos -->
+      <div class="quick-switch">
+        <button id="qs-to-it" class="switch-btn" style="display:none" onclick="navigateTo('it')">
+          <i class="fas fa-laptop-code"></i>
+          Ir a Tecnología
+        </button>
+        <button id="qs-stay-gh" class="switch-btn secondary" style="display:none" onclick="navigateTo('gestion-humana')">
+          <i class="fas fa-users"></i>
+          Permanecer en Gestión Humana
+        </button>
+        <button id="qs-to-gh" class="switch-btn" style="display:none" onclick="navigateTo('gestion-humana')">
+          <i class="fas fa-users"></i>
+          Ir a Gestión Humana
+        </button>
+        <button id="qs-stay-it" class="switch-btn secondary" style="display:none" onclick="navigateTo('it')">
+          <i class="fas fa-laptop-code"></i>
+          Permanecer en Tecnología
+        </button>
+      </div>
+      
       <div class="sidebar-footer">
         <!-- Información del usuario -->
         <div class="user-section">
@@ -650,15 +677,7 @@
         </div>
         
         <div class="top-bar-right">
-          <!-- Botones de cambio rápido entre módulos -->
-          <button id="switch-to-it" class="switch-btn" style="display:none" onclick="navigateTo('it')">
-            <i class="fas fa-laptop-code"></i>
-            Ir a Tecnología
-          </button>
-          <button id="switch-to-gestion-humana" class="switch-btn secondary" style="display:none" onclick="navigateTo('gestion-humana')">
-            <i class="fas fa-users"></i>
-            Ir a Gestión Humana
-          </button>
+          <!-- Información del usuario movida al sidebar -->
         </div>
       </div>
       
@@ -759,7 +778,7 @@
       if (pageTitle) {
         pageTitle.textContent = title
       }
-      updateCrossLinks()
+      updateQuickSwitch()
     }
     
     // Función para ocultar todos los contenedores
@@ -790,24 +809,29 @@
       if (container) {
         container.style.display = 'block'
       }
-      updateCrossLinks()
+      updateQuickSwitch()
     }
 
-    // Mostrar/ocultar botones de cambio rápido según módulo activo
-    function updateCrossLinks() {
-      const btnToIT = document.getElementById('switch-to-it')
-      const btnToGH = document.getElementById('switch-to-gestion-humana')
-      if (!btnToIT || !btnToGH) return
+    // Actualiza los botones contextuales de cambio rápido
+    function updateQuickSwitch() {
+      const toIT = document.getElementById('qs-to-it')
+      const stayGH = document.getElementById('qs-stay-gh')
+      const toGH = document.getElementById('qs-to-gh')
+      const stayIT = document.getElementById('qs-stay-it')
+      if (!toIT || !stayGH || !toGH || !stayIT) return
+      
+      // Reset
+      toIT.style.display = 'none'
+      stayGH.style.display = 'none'
+      toGH.style.display = 'none'
+      stayIT.style.display = 'none'
       
       if (currentModule === 'gestion-humana') {
-        btnToIT.style.display = 'inline-flex'
-        btnToGH.style.display = 'none'
+        toIT.style.display = 'inline-flex'
+        stayGH.style.display = 'inline-flex'
       } else if (currentModule === 'it') {
-        btnToIT.style.display = 'none'
-        btnToGH.style.display = 'inline-flex'
-      } else {
-        btnToIT.style.display = 'none'
-        btnToGH.style.display = 'none'
+        toGH.style.display = 'inline-flex'
+        stayIT.style.display = 'inline-flex'
       }
     }
     
@@ -872,6 +896,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Cargar home por defecto
       navigateTo('home')
+      updateQuickSwitch()
       
       // Manejar redimensionamiento de ventana
       window.addEventListener('resize', function() {
