@@ -407,6 +407,31 @@
       gap: 16px;
     }
     
+    /* Botones de cambio rápido entre módulos */
+    .switch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(102,126,234,0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .switch-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(102,126,234,0.35);
+    }
+    .switch-btn.secondary {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 8px 24px rgba(34,197,94,0.3);
+    }
+    
     /* Estilos del usuario movidos al sidebar */
     
     /* Contenido de micro frontends */
@@ -625,7 +650,15 @@
         </div>
         
         <div class="top-bar-right">
-          <!-- Información del usuario movida al sidebar -->
+          <!-- Botones de cambio rápido entre módulos -->
+          <button id="switch-to-it" class="switch-btn" style="display:none" onclick="navigateTo('it')">
+            <i class="fas fa-laptop-code"></i>
+            Ir a Tecnología
+          </button>
+          <button id="switch-to-gestion-humana" class="switch-btn secondary" style="display:none" onclick="navigateTo('gestion-humana')">
+            <i class="fas fa-users"></i>
+            Ir a Gestión Humana
+          </button>
         </div>
       </div>
       
@@ -726,6 +759,7 @@
       if (pageTitle) {
         pageTitle.textContent = title
       }
+      updateCrossLinks()
     }
     
     // Función para ocultar todos los contenedores
@@ -755,6 +789,25 @@
       const container = document.getElementById(containerId)
       if (container) {
         container.style.display = 'block'
+      }
+      updateCrossLinks()
+    }
+
+    // Mostrar/ocultar botones de cambio rápido según módulo activo
+    function updateCrossLinks() {
+      const btnToIT = document.getElementById('switch-to-it')
+      const btnToGH = document.getElementById('switch-to-gestion-humana')
+      if (!btnToIT || !btnToGH) return
+      
+      if (currentModule === 'gestion-humana') {
+        btnToIT.style.display = 'inline-flex'
+        btnToGH.style.display = 'none'
+      } else if (currentModule === 'it') {
+        btnToIT.style.display = 'none'
+        btnToGH.style.display = 'inline-flex'
+      } else {
+        btnToIT.style.display = 'none'
+        btnToGH.style.display = 'none'
       }
     }
     
