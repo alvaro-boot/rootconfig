@@ -840,6 +840,11 @@
       // Actualizar estado
       currentModule = moduleName
       
+      // Actualizar la URL del navegador
+      const newUrl = `/${moduleName}`
+      window.history.pushState({}, '', newUrl)
+      console.log(`URL actualizada a: ${newUrl}`)
+      
       // Actualizar navegación activa
       updateActiveNavigation(moduleName)
       
@@ -868,6 +873,12 @@
       if (currentModule !== moduleName) {
         navigateTo(moduleName)
       }
+      
+      // Actualizar la URL del navegador
+      const normalizedPath = route.startsWith('/') ? route : `/${route}`
+      const newUrl = `/${moduleName}${normalizedPath}`
+      window.history.pushState({}, '', newUrl)
+      console.log(`URL actualizada a: ${newUrl}`)
       
       // Actualizar la ruta del iframe
       setTimeout(() => {
