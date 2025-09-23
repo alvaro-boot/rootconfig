@@ -5,6 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal de Aplicaciones - COOTRAVIR</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+  
+  <!-- SCRIPT ANTI-HASH INMEDIATO -->
+  <script>
+    // EJECUTAR INMEDIATAMENTE, ANTES DE CUALQUIER COSA
+    (function() {
+      // Limpiar hash si existe
+      if (window.location.hash) {
+        window.history.replaceState({}, '', window.location.pathname + window.location.search)
+      }
+      
+      // Sobrescribir location.hash inmediatamente
+      let _hash = ''
+      Object.defineProperty(window.location, 'hash', {
+        get: function() { return '' },
+        set: function(value) { 
+          console.log('Hash bloqueado inmediatamente:', value)
+        }
+      })
+      
+      // Monitorear cambios en la URL cada 50ms
+      setInterval(function() {
+        if (window.location.hash) {
+          window.history.replaceState({}, '', window.location.pathname + window.location.search)
+          console.log('Hash eliminado inmediatamente')
+        }
+      }, 50)
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1084,8 +1112,40 @@
       }
     }
 
+    // DESACTIVAR COMPLETAMENTE EL HASH ROUTING
+    function disableHashRouting() {
+      // Sobrescribir window.location.hash para que no funcione
+      let _hash = ''
+      Object.defineProperty(window.location, 'hash', {
+        get: function() { return '' },
+        set: function(value) { 
+          console.log('Intento de establecer hash bloqueado:', value)
+          // No hacer nada, bloquear completamente
+        }
+      })
+      
+      // Sobrescribir window.location.href para interceptar cambios
+      let _href = window.location.href
+      Object.defineProperty(window.location, 'href', {
+        get: function() { return _href },
+        set: function(value) {
+          if (value && value.includes('#')) {
+            const cleanValue = value.split('#')[0]
+            console.log('Intento de cambiar href con hash bloqueado:', value, '->', cleanValue)
+            _href = cleanValue
+            window.history.replaceState({}, '', cleanValue)
+          } else {
+            _href = value
+          }
+        }
+      })
+    }
+
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
+      // DESACTIVAR COMPLETAMENTE EL HASH ROUTING PRIMERO
+      disableHashRouting()
+      
       // Interceptar modificaciones de URL ANTES de cualquier otra cosa
       interceptUrlChanges()
       

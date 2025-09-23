@@ -78,6 +78,15 @@ registerApplication({
   activeWhen: () => true
 })
 
+// Configurar Single SPA para forzar modo history (sin hash)
+// Desactivar completamente el hash routing
+window.addEventListener('beforeunload', function() {
+  // Forzar limpieza de hash antes de cualquier navegación
+  if (window.location.hash) {
+    window.history.replaceState({}, '', window.location.pathname + window.location.search)
+  }
+})
+
 // Iniciar Single SPA
 start({
   urlRerouteOnly: true
