@@ -1,4 +1,4 @@
-import { registerApplication, start } from 'single-spa'
+import { registerApplication, start, setUrlRerouteOnly } from 'single-spa'
 
 // Función para crear una aplicación con iframe
 const createIframeApp = (url, containerId) => {
@@ -78,10 +78,11 @@ registerApplication({
   activeWhen: () => true
 })
 
+// Configurar Single SPA para usar history mode (sin hash)
+setUrlRerouteOnly(true)
+
 // Iniciar Single SPA
-start({
-  urlRerouteOnly: true
-})
+start()
 
 // Escuchar mensajes desde los iframes para navegación cruzada
 window.addEventListener('message', (event) => {

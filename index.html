@@ -1047,12 +1047,19 @@
       button.classList.toggle('active')
     }
     
+    // Función para limpiar hash de la URL
+    function cleanHashFromUrl() {
+      if (window.location.hash) {
+        const cleanUrl = window.location.origin + window.location.pathname + window.location.search
+        window.history.replaceState({}, '', cleanUrl)
+        console.log('Hash eliminado de la URL')
+      }
+    }
+
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
       // Limpiar el hash de la URL si existe
-      if (window.location.hash) {
-        window.history.replaceState({}, '', window.location.pathname)
-      }
+      cleanHashFromUrl()
       
       // Cargar home por defecto y mostrar su submenú
       navigateTo('home')
@@ -1064,6 +1071,14 @@
           closeSidebar()
         }
       })
+      
+      // Limpiar hash cada vez que cambie la URL
+      window.addEventListener('hashchange', function() {
+        cleanHashFromUrl()
+      })
+      
+      // Limpiar hash periódicamente (fallback)
+      setInterval(cleanHashFromUrl, 1000)
       
       // Cerrar sidebar al hacer clic fuera en móvil
       document.addEventListener('click', function(e) {
