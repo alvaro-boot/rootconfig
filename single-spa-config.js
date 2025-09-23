@@ -102,7 +102,9 @@ window.addEventListener('message', (event) => {
       // Actualizar la URL del navegador (sin hash)
       const path = data.path || '/'
       const normalizedPath = path.startsWith('/') ? path : `/${path}`
-      const newUrl = `/${data.module}${normalizedPath}`
+      let newUrl = `/${data.module}${normalizedPath}`
+      // Asegurar que no hay hash en la URL
+      newUrl = newUrl.split('#')[0]
       
       // Usar history.replaceState para actualizar la URL sin recargar la página y eliminar el hash
       window.history.replaceState({}, '', newUrl)

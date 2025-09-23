@@ -841,7 +841,9 @@
       currentModule = moduleName
       
       // Actualizar la URL del navegador (sin hash)
-      const newUrl = `/${moduleName}`
+      let newUrl = `/${moduleName}`
+      // Asegurar que no hay hash en la URL
+      newUrl = newUrl.split('#')[0]
       window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
       
@@ -876,7 +878,9 @@
       
       // Actualizar la URL del navegador (sin hash)
       const normalizedPath = route.startsWith('/') ? route : `/${route}`
-      const newUrl = `/${moduleName}${normalizedPath}`
+      let newUrl = `/${moduleName}${normalizedPath}`
+      // Asegurar que no hay hash en la URL
+      newUrl = newUrl.split('#')[0]
       // Usar replaceState para evitar agregar al historial y eliminar el hash
       window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
@@ -1052,12 +1056,39 @@
       if (window.location.hash) {
         const cleanUrl = window.location.origin + window.location.pathname + window.location.search
         window.history.replaceState({}, '', cleanUrl)
-        console.log('Hash eliminado de la URL')
+        console.log('Hash eliminado de la URL:', cleanUrl)
+      }
+    }
+
+    // Interceptar todas las modificaciones de URL
+    function interceptUrlChanges() {
+      const originalPushState = history.pushState
+      const originalReplaceState = history.replaceState
+      
+      history.pushState = function(state, title, url) {
+        if (url && url.includes('#')) {
+          const cleanUrl = url.split('#')[0]
+          console.log('Interceptando pushState con hash:', url, '->', cleanUrl)
+          return originalPushState.call(this, state, title, cleanUrl)
+        }
+        return originalPushState.call(this, state, title, url)
+      }
+      
+      history.replaceState = function(state, title, url) {
+        if (url && url.includes('#')) {
+          const cleanUrl = url.split('#')[0]
+          console.log('Interceptando replaceState con hash:', url, '->', cleanUrl)
+          return originalReplaceState.call(this, state, title, cleanUrl)
+        }
+        return originalReplaceState.call(this, state, title, url)
       }
     }
 
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
+      // Interceptar modificaciones de URL ANTES de cualquier otra cosa
+      interceptUrlChanges()
+      
       // Limpiar el hash de la URL si existe
       cleanHashFromUrl()
       
@@ -1079,6 +1110,17 @@
       
       // Limpiar hash periódicamente (fallback)
       setInterval(cleanHashFromUrl, 1000)
+      
+      // Interceptar cambios directos en window.location
+      let lastUrl = window.location.href
+      setInterval(() => {
+        if (window.location.href !== lastUrl) {
+          if (window.location.hash) {
+            cleanHashFromUrl()
+          }
+          lastUrl = window.location.href
+        }
+      }, 100)
       
       // Cerrar sidebar al hacer clic fuera en móvil
       document.addEventListener('click', function(e) {
