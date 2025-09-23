@@ -91,3 +91,61 @@ registerApplication({
 start({
   urlRerouteOnly: true
 })
+
+// Escuchar mensajes desde los iframes para navegación cruzada
+window.addEventListener('message', (event) => {
+  try {
+    const data = event.data || {}
+    if (data.type === 'navigate' && data.module) {
+      // Mostrar solo el contenedor del módulo destino
+      const containers = [
+        'single-spa-application:home',
+        'single-spa-application:it',
+        'single-spa-application:gestion-humana',
+      ]
+      containers.forEach((id) => {
+        const el = document.getElementById(id)
+        if (el) el.style.display = id.endsWith(data.module) ? 'block' : 'none'
+      })
+
+      // Ajustar ruta interna si se pasa path
+      if (data.module === 'it') {
+        const itContainer = document.getElementById('single-spa-application:it')
+        if (itContainer) {
+          const iframe = itContainer.querySelector('iframe')
+          if (iframe) {
+            const base = 'https://it-g8e6.onrender.com'
+            const next = data.path ? `${base}${data.path}` : base
+            iframe.src = next
+          }
+        }
+      }
+
+      if (data.module === 'home') {
+        const homeContainer = document.getElementById('single-spa-application:home')
+        if (homeContainer) {
+          const iframe = homeContainer.querySelector('iframe')
+          if (iframe) {
+            const base = 'https://home-1z8r.onrender.com'
+            const next = data.path ? `${base}${data.path}` : base
+            iframe.src = next
+          }
+        }
+      }
+
+      if (data.module === 'gestion-humana') {
+        const ghContainer = document.getElementById('single-spa-application:gestion-humana')
+        if (ghContainer) {
+          const iframe = ghContainer.querySelector('iframe')
+          if (iframe) {
+            const base = 'https://gh-8vga.onrender.com'
+            const next = data.path ? `${base}${data.path}` : base
+            iframe.src = next
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error handling postMessage navigation', e)
+  }
+})
