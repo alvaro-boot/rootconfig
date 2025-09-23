@@ -840,9 +840,9 @@
       // Actualizar estado
       currentModule = moduleName
       
-      // Actualizar la URL del navegador
+      // Actualizar la URL del navegador (sin hash)
       const newUrl = `/${moduleName}`
-      window.history.pushState({}, '', newUrl)
+      window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
       
       // Actualizar navegación activa
@@ -874,10 +874,11 @@
         navigateTo(moduleName)
       }
       
-      // Actualizar la URL del navegador
+      // Actualizar la URL del navegador (sin hash)
       const normalizedPath = route.startsWith('/') ? route : `/${route}`
       const newUrl = `/${moduleName}${normalizedPath}`
-      window.history.pushState({}, '', newUrl)
+      // Usar replaceState para evitar agregar al historial y eliminar el hash
+      window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
       
       // Actualizar la ruta del iframe
@@ -1048,6 +1049,11 @@
     
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
+      // Limpiar el hash de la URL si existe
+      if (window.location.hash) {
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+      
       // Cargar home por defecto y mostrar su submenú
       navigateTo('home')
       toggleSubmenu('home')

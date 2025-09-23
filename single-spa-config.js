@@ -99,13 +99,13 @@ window.addEventListener('message', (event) => {
         if (el) el.style.display = id.endsWith(data.module) ? 'block' : 'none'
       })
 
-      // Actualizar la URL del navegador
+      // Actualizar la URL del navegador (sin hash)
       const path = data.path || '/'
       const normalizedPath = path.startsWith('/') ? path : `/${path}`
       const newUrl = `/${data.module}${normalizedPath}`
       
-      // Usar history.pushState para actualizar la URL sin recargar la página
-      window.history.pushState({}, '', newUrl)
+      // Usar history.replaceState para actualizar la URL sin recargar la página y eliminar el hash
+      window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
 
       // Ajustar ruta interna si se pasa path
