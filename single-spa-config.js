@@ -78,6 +78,13 @@ registerApplication({
   activeWhen: () => true
 })
 
+// Registrar la aplicación Operaciones
+registerApplication({
+  name: 'operaciones',
+  app: () => Promise.resolve(createIframeApp('https://operaciones-1.onrender.com', 'single-spa-application:operaciones')),
+  activeWhen: () => true
+})
+
 // Configurar Single SPA para forzar modo history (sin hash)
 // Desactivar completamente el hash routing
 window.addEventListener('beforeunload', function() {
@@ -102,6 +109,7 @@ window.addEventListener('message', (event) => {
         'single-spa-application:home',
         'single-spa-application:it',
         'single-spa-application:gestion-humana',
+        'single-spa-application:operaciones',
       ]
       containers.forEach((id) => {
         const el = document.getElementById(id)
@@ -139,6 +147,18 @@ window.addEventListener('message', (event) => {
           const iframe = ghContainer.querySelector('iframe')
           if (iframe) {
             const base = 'https://gh-8vga.onrender.com'
+            const next = data.path ? `${base}${data.path}` : base
+            iframe.src = next
+          }
+        }
+      }
+
+      if (data.module === 'operaciones') {
+        const operacionesContainer = document.getElementById('single-spa-application:operaciones')
+        if (operacionesContainer) {
+          const iframe = operacionesContainer.querySelector('iframe')
+          if (iframe) {
+            const base = 'https://operaciones-1.onrender.com'
             const next = data.path ? `${base}${data.path}` : base
             iframe.src = next
           }
