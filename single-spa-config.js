@@ -119,18 +119,7 @@ window.addEventListener('message', (event) => {
       window.history.replaceState({}, '', newUrl)
       console.log(`URL actualizada a: ${newUrl}`)
 
-      // Ajustar ruta interna si se pasa path
-      if (data.module === 'it') {
-        const itContainer = document.getElementById('single-spa-application:it')
-        if (itContainer) {
-          const iframe = itContainer.querySelector('iframe')
-          if (iframe) {
-            const base = 'https://it-g8e6.onrender.com'
-            const next = data.path ? `${base}${data.path}` : base
-            iframe.src = next
-          }
-        }
-      }
+      // No re-cargar el iframe al navegar; solo actualizar URL del parent
 
       if (data.module === 'home') {
         const homeContainer = document.getElementById('single-spa-application:home')
