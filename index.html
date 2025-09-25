@@ -514,7 +514,8 @@
     
     #single-spa-application:home,
     #single-spa-application:it,
-    #single-spa-application:gestion-humana {
+    #single-spa-application:gestion-humana,
+    #single-spa-application:operaciones {
       min-height: calc(100vh - 80px);
     }
     
@@ -734,6 +735,37 @@
           </div>
         </div>
         
+        <!-- Operaciones -->
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="toggleSubmenu('operaciones')" data-module="operaciones">
+            <i class="fas fa-truck nav-icon"></i>
+            <span class="nav-text">Operaciones</span>
+            <i class="fas fa-chevron-down nav-arrow" id="arrow-operaciones"></i>
+          </a>
+          <div class="submenu" id="submenu-operaciones" style="display: none;">
+            <a href="#" class="submenu-item" onclick="navigateToRoute('operaciones', '/')">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard Operaciones</span>
+            </a>
+            <a href="#" class="submenu-item" onclick="navigateToRoute('operaciones', '/flota')">
+              <i class="fas fa-bus"></i>
+              <span>Flota</span>
+            </a>
+            <a href="#" class="submenu-item" onclick="navigateToRoute('operaciones', '/conductores')">
+              <i class="fas fa-id-card"></i>
+              <span>Conductores</span>
+            </a>
+            <a href="#" class="submenu-item" onclick="navigateToRoute('operaciones', '/rutas')">
+              <i class="fas fa-route"></i>
+              <span>Rutas</span>
+            </a>
+            <a href="#" class="submenu-item" onclick="navigateToRoute('operaciones', '/programacion')">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Programación</span>
+            </a>
+          </div>
+        </div>
+
         <!-- Configuración -->
         <div class="nav-item">
           <a href="#" class="nav-link" onclick="navigateTo('configuracion')" data-module="configuracion">
@@ -819,6 +851,7 @@
   <div id="single-spa-application:home" style="display: block;"></div>
   <div id="single-spa-application:it" style="display: none;"></div>
   <div id="single-spa-application:gestion-humana" style="display: none;"></div>
+  <div id="single-spa-application:operaciones" style="display: none;"></div>
   
         <!-- Contenedor para módulos no implementados -->
         <div id="module-placeholder" style="display: none;">
@@ -852,6 +885,11 @@
         title: 'Gestión Humana',
         url: 'https://gh-8vga.onrender.com',
         container: 'single-spa-application:gestion-humana'
+      },
+      'operaciones': {
+        title: 'Operaciones',
+        url: 'https://operaciones-1.onrender.com',
+        container: 'single-spa-application:operaciones'
       },
       'configuracion': {
         title: 'Configuración',
@@ -998,7 +1036,8 @@
       const containers = [
         'single-spa-application:home',
         'single-spa-application:it',
-        'single-spa-application:gestion-humana'
+        'single-spa-application:gestion-humana',
+        'single-spa-application:operaciones'
       ]
       
       containers.forEach(containerId => {
