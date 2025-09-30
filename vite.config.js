@@ -25,6 +25,9 @@ export default defineConfig({
       'www.cootrapps.com',
       '.cootrapps.com',
       'rootconfig.onrender.com',
+      'testmfe.cootravir.app',
+      'www.testmfe.cootravir.app',
+      '.testmfe.cootravir.app',
       '.onrender.com'
     ]
   }
